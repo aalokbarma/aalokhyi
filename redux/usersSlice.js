@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import {createSlice} from '@reduxjs/toolkit';
 
 const usersSlice = createSlice({
   name: 'users',
@@ -9,7 +9,7 @@ const usersSlice = createSlice({
     currUser: {},
   },
   reducers: {
-    fetchUsersStart: (state) => {
+    fetchUsersStart: state => {
       state.loading = true;
       state.error = null;
     },
@@ -25,21 +25,21 @@ const usersSlice = createSlice({
       state.users.push(action.payload);
     },
     updateUserSuccess: (state, action) => {
-      const index = state.users.findIndex(user => user.id === action.payload.id);
+      const index = state.users.findIndex(
+        user => user.id === action.payload.id,
+      );
       if (index !== -1) {
         state.users[index] = action.payload;
       }
     },
     fetchCurrentUser: (state, action) => {
-
-      // console.warn("CurrentUserData => " + JSON.stringify(action.payload))
       const index = state.users.findIndex(user => user.id === action.payload);
       state.currUser = state.users[index];
     },
     deleteUserSuccess: (state, action) => {
       state.users = state.users.filter(user => user.id !== action.payload);
-    }
-  }
+    },
+  },
 });
 
 export const {
@@ -49,7 +49,7 @@ export const {
   createUserSuccess,
   updateUserSuccess,
   deleteUserSuccess,
-  fetchCurrentUser
+  fetchCurrentUser,
 } = usersSlice.actions;
 
 export default usersSlice.reducer;

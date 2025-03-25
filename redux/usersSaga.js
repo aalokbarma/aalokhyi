@@ -1,7 +1,6 @@
 import { call, put, takeLatest } from 'redux-saga/effects';
 import axios from 'axios';
 import {
-  fetchUsersStart,
   fetchUsersSuccess,
   fetchUsersFailure,
   createUserSuccess,

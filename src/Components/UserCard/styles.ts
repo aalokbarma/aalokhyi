@@ -3,7 +3,6 @@ import Colors from "../../Constants/Colors";
 
 const Styles = StyleSheet.create({
     userCard: {
-
     },
     userCardMainContainer: {
         flexDirection: 'row',
