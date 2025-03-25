@@ -6,8 +6,6 @@ import {useDispatch, useSelector} from 'react-redux';
 import {
   fetchUsersStart,
   createUserSuccess,
-  updateUserSuccess,
-  deleteUserSuccess,
 } from '../../../redux/usersSlice';
 import axios from 'axios';
 import {API_URL} from '../../Constants/URLs';
@@ -21,8 +19,6 @@ const HomeScreen = ({navigation}: any) => {
   const [addUserModalVisible, setAddUserModalVisible] =
     useState<Boolean>(false);
 
-  const [newUser, setNewUser] = useState({});
-  const [editingUser, setEditingUser] = useState<any>(null);
 
   useEffect(() => {
     dispatch(fetchUsersStart());
