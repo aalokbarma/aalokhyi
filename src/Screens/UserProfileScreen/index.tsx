@@ -3,7 +3,7 @@ import React, {useState} from 'react';
 import Styles from './styles';
 import {useSelector} from 'react-redux';
 import {useDispatch} from 'react-redux';
-import {updateUserSuccess, deleteUserSuccess} from '../../../redux/usersSlice';
+import {updateUserSuccess, deleteUserSuccess, fetchCurrentUser} from '../../../redux/usersSlice';
 import axios from 'axios';
 import {API_URL} from '../../Constants/URLs';
 import UserInputModal from '../../Components/UserInputModal';
@@ -23,8 +23,16 @@ const UserProfileScreen = ({navigation}: any) => {
     try {
       const response = await axios.put(`${API_URL}/${currentUser?.id}`, user);
       dispatch(updateUserSuccess(response.data));
-      Alert.alert('Userdata edited successfully');
-    } catch (err) {
+      dispatch(fetchCurrentUser(currentUser?.id));
+      Alert.alert('Userdata updated successfully');
+    } catch (err: any) {
+      Alert.alert('Failure', err, [
+        {
+          text: 'Ok',
+          onPress: () => {},
+          style: 'cancel',
+        },
+      ]);
       console.error(err);
     }
   };

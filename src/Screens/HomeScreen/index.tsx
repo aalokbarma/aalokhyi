@@ -12,6 +12,7 @@ import {
 import axios from 'axios';
 import {API_URL} from '../../Constants/URLs';
 import UserInputModal from '../../Components/UserInputModal';
+import { ScrollView } from 'react-native-gesture-handler';
 
 const HomeScreen = ({navigation}: any) => {
   const dispatch = useDispatch();
@@ -55,7 +56,7 @@ const HomeScreen = ({navigation}: any) => {
           <Text style={Styles.addUserButtonText}>Add new user</Text>
         </TouchableOpacity>
       </View>
-      <View style={Styles.mainContainer}>
+      <ScrollView style={Styles.mainContainer}>
         <FlatList
           data={users}
           keyExtractor={(item, index) =>
@@ -64,8 +65,9 @@ const HomeScreen = ({navigation}: any) => {
           renderItem={({item, index}) => (
             <UserCard navigation={navigation} item={item} index={index} />
           )}
+          ListFooterComponent={() => <View style = {Styles.flatlistFooterComponent} />}
         />
-      </View>
+      </ScrollView>
       <UserInputModal
         visible={addUserModalVisible}
         onClose={onUserModalClose}

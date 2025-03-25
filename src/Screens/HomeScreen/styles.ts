@@ -19,12 +19,14 @@ const Styles = StyleSheet.create({
   },
   mainContainer: {
     padding: 10,
+    paddingBottom: 30
   },
   addUserButtonContainer: {
     width: '100%',
     paddingVertical: 3,
     paddingHorizontal: 10,
     alignItems: 'flex-end',
+    marginBottom: 5,
   },
   addUserButton: {
     paddingHorizontal: 15,
@@ -36,6 +38,9 @@ const Styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '500',
     color: Colors.background,
+  },
+  flatlistFooterComponent: {
+    marginVertical: 10
   },
 });
 
