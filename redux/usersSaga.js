@@ -8,8 +8,7 @@ import {
   updateUserSuccess,
   deleteUserSuccess
 } from './usersSlice';
-
-const API_URL = 'https://jsonplaceholder.typicode.com/users';
+import { API_URL } from '../src/Constants/URLs';
 
 function* fetchUsers() {
   try {

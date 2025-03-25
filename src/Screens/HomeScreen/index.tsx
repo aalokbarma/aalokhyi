@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, FlatList } from 'react-native'
+import { View, Text, TouchableOpacity, FlatList, Alert } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import Styles from './styles';
 import UserCard from '../../Components/UserCard';
@@ -58,6 +58,7 @@ const HomeScreen = ({navigation}: any) => {
     try {
       const response = await axios.post(API_URL, user);
       dispatch(createUserSuccess(response.data));
+      Alert.alert("User created successfully");
       // setNewUser({ name: '', email: '' });
     } catch (err) {
       console.error(err);
@@ -115,7 +116,7 @@ const HomeScreen = ({navigation}: any) => {
           />
             
         </View>
-        <UserInputModal visible = {addUserModalVisible} onClose = {onUserModalClose} onSave = {handleAddUser}  />
+        <UserInputModal visible = {addUserModalVisible} onClose = {onUserModalClose} onSave = {handleAddUser} isEdit = {false} userData = {{}}  />
     </View>
   )
 }

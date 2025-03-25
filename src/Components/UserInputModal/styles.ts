@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import Colors from "../../Constants/Colors";
 
 const Styles = StyleSheet.create({
     modalContainer: {
@@ -35,6 +36,18 @@ const Styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "space-between",
         marginTop: 10,
+      },
+      button: {
+        width: '45%',
+        paddingVertical: 5,
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: 5
+      },
+      buttonText: {
+        color: Colors.background,
+        fontWeight: '600',
+        fontSize: 20
       },
 });
 

@@ -1,11 +1,11 @@
 import React from "react";
-import { View, Text, TextInput, Modal, Button, ScrollView } from "react-native";
+import { View, Text, TextInput, Modal, Button, ScrollView, TouchableOpacity } from "react-native";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import Colors from "../../Constants/Colors";
 import Styles from "./styles";
 
-const UserInputModal = ({ visible, onClose, onSave }: any) => {
+const UserInputModal = ({ visible, onClose, onSave, isEdit, userData }: any) => {
   const validationSchema = Yup.object().shape({
     name: Yup.string().required("Name is required"),
     username: Yup.string().required("Username is required"),
@@ -23,21 +23,21 @@ const UserInputModal = ({ visible, onClose, onSave }: any) => {
       <View style={Styles.modalContainer}>
         <View style={Styles.modalContent}>
           <ScrollView>
-            <Text style={Styles.title}>Create User</Text>
+            <Text style={Styles.title}>{isEdit ? "Edit User" : "Create User"}</Text>
 
             <Formik
               initialValues={{
-                name: "",
-                username: "",
-                email: "",
-                phone: "",
-                website: "",
-                companyName: "",
-                street: "",
-                suite: "",
-                city: "",
-                zipcode: "",
-                catchPhrase: "",
+                name: userData?.name || "",
+                username: userData?.username || "",
+                email: userData?.email || "",
+                phone: userData?.phone || "",
+                website: userData?.website || "",
+                companyName: userData?.company?.name || "",
+                street: userData?.address?.street || "",
+                suite: userData?.address?.suite || "",
+                city: userData?.address?.city || "",
+                zipcode: userData?.address?.zipcode || "",
+                catchPhrase: userData?.company?.catchPhrase || "",
               }}
               validationSchema={validationSchema}
               onSubmit={(values) => {
@@ -178,8 +178,12 @@ const UserInputModal = ({ visible, onClose, onSave }: any) => {
                   />
 
                   <View style={Styles.buttonRow}>
-                    <Button title="Cancel" onPress={onClose} color="red" />
-                    <Button title="Save" onPress={handleSubmit} />
+                    <TouchableOpacity style = {[Styles.button, {backgroundColor: Colors.redButton}]} onPress={onClose}>
+                        <Text style = {Styles.buttonText}>Cancel</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style = {[Styles.button, {backgroundColor: Colors.lightBlueButton}]} onPress={handleSubmit}>
+                        <Text style = {Styles.buttonText}>Save</Text>
+                    </TouchableOpacity>
                   </View>
                 </>
               )}

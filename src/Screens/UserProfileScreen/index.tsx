@@ -1,5 +1,5 @@
 import { View, Text, TouchableOpacity, ScrollView, Alert } from 'react-native';
-import React from 'react';
+import React, { useState } from 'react';
 import Styles from './styles';
 import { 
     useSelector 
@@ -13,16 +13,28 @@ import {
   } from '../../../redux/usersSlice';
 import axios from 'axios';
 import { API_URL } from '../../Constants/URLs';
+import UserInputModal from '../../Components/UserInputModal';
 
 const UserProfileScreen = ({navigation}: any) => {
 
     const dispatch = useDispatch();
-    const users = useSelector((state: any) => state?.users?.users);
     const currentUser = useSelector((state: any) => state?.users?.currUser);
+
+    const [editUserModalVisible, setEditUserModalVisible] = useState<Boolean>(false);
 
     const onBackButtonPress = () => {
         navigation.goBack();
     }
+
+    const handleUpdateUser = async (user: any) => {
+          try {
+            const response = await axios.put(`${API_URL}/${currentUser?.id}`, user);
+            dispatch(updateUserSuccess(response.data));
+            Alert.alert("Userdata edited successfully");
+          } catch (err) {
+            console.error(err);
+          }
+      };
 
     const handleDeleteUser = async (id: any) => {
         try {
@@ -32,6 +44,8 @@ const UserProfileScreen = ({navigation}: any) => {
           console.error(err);
         }
       };
+
+
 
     console.warn("UserData from params => " + JSON.stringify(currentUser))
 
@@ -54,6 +68,13 @@ const UserProfileScreen = ({navigation}: any) => {
                 style: 'cancel',
             },
           ]);
+      }
+
+      const onEditUserModalVisible = () => {
+        setEditUserModalVisible(true);
+      }
+      const onEditUserModalClose = () => {
+        setEditUserModalVisible(false);
       }
 
   return (
@@ -96,7 +117,7 @@ const UserProfileScreen = ({navigation}: any) => {
             </View>
 
             <View style = {Styles.editButtonContainer}>
-                <TouchableOpacity style = {Styles.editButton}>
+                <TouchableOpacity style = {Styles.editButton} onPress={onEditUserModalVisible}>
                     <Text style = {Styles.editButtonText}>Edit details</Text>
                 </TouchableOpacity>
             </View>
@@ -106,6 +127,7 @@ const UserProfileScreen = ({navigation}: any) => {
                 </TouchableOpacity>
             </View>
         </ScrollView>
+        <UserInputModal visible = {editUserModalVisible} onClose = {onEditUserModalClose} onSave = {handleUpdateUser} isEdit = {true} userData = {currentUser}  />
     </View>
   )
 }
