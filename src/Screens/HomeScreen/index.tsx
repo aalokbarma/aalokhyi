@@ -10,8 +10,8 @@ import {
   deleteUserSuccess,
 } from '../../../redux/usersSlice';
 import axios from 'axios';
-
-const API_URL = 'https://jsonplaceholder.typicode.com/users';
+import { API_URL } from '../../Constants/URLs';
+import UserInputModal from '../../Components/UserInputModal';
 
 const HomeScreen = ({navigation}: any) => {
 
@@ -20,19 +20,45 @@ const HomeScreen = ({navigation}: any) => {
   const loading = useSelector((state: any) => state.users.loading);
   const error = useSelector((state: any) => state.users.error);
 
-  const [newUser, setNewUser] = useState({ name: '', email: '' });
+  const [addUserModalVisible, setAddUserModalVisible] = useState<Boolean>(false);
+
+  const [newUser, setNewUser] = useState(
+    // { name: '', email: '' }
+    {
+      id: 1,
+      name: "Leanne Graham",
+      username: "Bret",
+      email: "Sincere@april.biz",
+      address: {
+        street: "Kulas Light",
+        suite: "Apt. 556",
+        city: "Gwenborough",
+        zipcode: "92998-3874",
+        geo: {
+          lat: "-37.3159",
+          lng: "81.1496",
+        },
+      },
+      phone: "1-770-736-8031 x56442",
+      website: "hildegard.org",
+      company: {
+        name: "Romaguera-Crona",
+        catchPhrase: "Multi-layered client-server neural-net",
+        bs: "harness real-time e-markets",
+      },
+    }
+    );
   const [editingUser, setEditingUser] = useState<any>(null);
 
   useEffect(() => {
     dispatch(fetchUsersStart());
-    // console.warn("UsersData => " + JSON.stringify(users))
   }, [dispatch]);
 
-  const handleAddUser = async () => {
+  const handleAddUser = async (user: any) => {
     try {
-      const response = await axios.post(API_URL, newUser);
+      const response = await axios.post(API_URL, user);
       dispatch(createUserSuccess(response.data));
-      setNewUser({ name: '', email: '' });
+      // setNewUser({ name: '', email: '' });
     } catch (err) {
       console.error(err);
     }
@@ -40,7 +66,7 @@ const HomeScreen = ({navigation}: any) => {
 
   const handleEditUser = (user: any) => {
     setEditingUser(user);
-    setNewUser({ name: user.name, email: user.email });
+    // setNewUser({ name: user.name, email: user.email });
   };
 
   const handleUpdateUser = async () => {
@@ -49,7 +75,7 @@ const HomeScreen = ({navigation}: any) => {
         const response = await axios.put(`${API_URL}/${editingUser.id}`, newUser);
         dispatch(updateUserSuccess(response.data));
         setEditingUser(null);
-        setNewUser({ name: '', email: '' });
+        // setNewUser({ name: '', email: '' });
       } catch (err) {
         console.error(err);
       }
@@ -65,11 +91,19 @@ const HomeScreen = ({navigation}: any) => {
     }
   };
 
+  const onUserModalVisible = () => {
+    setAddUserModalVisible(true);
+  };
+
+  const onUserModalClose = () => {
+    setAddUserModalVisible(false);
+  }
+
   return (
     <View style = {Styles.homeScreen}>
         <Text style = {Styles.headerText}>Users</Text>
         <View style = {Styles.addUserButtonContainer}>
-            <TouchableOpacity style = {Styles.addUserButton}>
+            <TouchableOpacity style = {Styles.addUserButton} onPress={onUserModalVisible}>
                 <Text style = {Styles.addUserButtonText}>Add new user</Text>
             </TouchableOpacity>
         </View>
@@ -81,6 +115,7 @@ const HomeScreen = ({navigation}: any) => {
           />
             
         </View>
+        <UserInputModal visible = {addUserModalVisible} onClose = {onUserModalClose} onSave = {handleAddUser}  />
     </View>
   )
 }

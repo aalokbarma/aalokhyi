@@ -6,6 +6,7 @@ const usersSlice = createSlice({
     users: [],
     loading: false,
     error: null,
+    currUser: {},
   },
   reducers: {
     fetchUsersStart: (state) => {
@@ -29,6 +30,12 @@ const usersSlice = createSlice({
         state.users[index] = action.payload;
       }
     },
+    fetchCurrentUser: (state, action) => {
+
+      // console.warn("CurrentUserData => " + JSON.stringify(action.payload))
+      const index = state.users.findIndex(user => user.id === action.payload);
+      state.currUser = state.users[index];
+    },
     deleteUserSuccess: (state, action) => {
       state.users = state.users.filter(user => user.id !== action.payload);
     }
@@ -41,7 +48,8 @@ export const {
   fetchUsersFailure,
   createUserSuccess,
   updateUserSuccess,
-  deleteUserSuccess
+  deleteUserSuccess,
+  fetchCurrentUser
 } = usersSlice.actions;
 
 export default usersSlice.reducer;

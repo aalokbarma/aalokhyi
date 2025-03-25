@@ -1,40 +1,43 @@
 import { View, Text, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import React from 'react';
 import Styles from './styles';
+import { 
+    useSelector 
+} from 'react-redux';
+import { useDispatch } from 'react-redux';
+import {
+    fetchUsersStart,
+    createUserSuccess,
+    updateUserSuccess,
+    deleteUserSuccess,
+  } from '../../../redux/usersSlice';
+import axios from 'axios';
+import { API_URL } from '../../Constants/URLs';
 
-const UserProfileScreen = ({navigation, route}: any) => {
-    const {item} = route?.params;
+const UserProfileScreen = ({navigation}: any) => {
+
+    const dispatch = useDispatch();
+    const users = useSelector((state: any) => state?.users?.users);
+    const currentUser = useSelector((state: any) => state?.users?.currUser);
+
     const onBackButtonPress = () => {
         navigation.goBack();
     }
 
-    // console.warn("UserData from params => " + JSON.stringify(route?.params))
-
-    const userData = {
-        id: 1,
-        name: "Leanne Graham",
-        username: "Bret",
-        email: "Sincere@april.biz",
-        address: {
-          street: "Kulas Light",
-          suite: "Apt. 556",
-          city: "Gwenborough",
-          zipcode: "92998-3874",
-          geo: {
-            lat: "-37.3159",
-            lng: "81.1496",
-          },
-        },
-        phone: "1-770-736-8031 x56442",
-        website: "hildegard.org",
-        company: {
-          name: "Romaguera-Crona",
-          catchPhrase: "Multi-layered client-server neural-net",
-          bs: "harness real-time e-markets",
-        },
+    const handleDeleteUser = async (id: any) => {
+        try {
+          await axios.delete(`${API_URL}/${id}`);
+          dispatch(deleteUserSuccess(id));
+        } catch (err) {
+          console.error(err);
+        }
       };
 
+    console.warn("UserData from params => " + JSON.stringify(currentUser))
+
+
       const onSuccessUserDeletion = () => {
+        handleDeleteUser(currentUser?.id);
         Alert.alert("User deleted succssfully.")
         onBackButtonPress();
       }
@@ -59,37 +62,37 @@ const UserProfileScreen = ({navigation, route}: any) => {
             <TouchableOpacity style = {Styles.backButtonContainer} onPress={onBackButtonPress}>
                 <Text style = {Styles.backButtonText}>{"<"}</Text>
             </TouchableOpacity>
-            <Text style = {Styles.userNameText}>@{item.username}</Text>
+            <Text style = {Styles.userNameText}>@{currentUser.username}</Text>
         </View>
         <ScrollView contentContainerStyle={Styles.mainContainer}>
-            <Text style={Styles.name}>{item.name}</Text>
+            <Text style={Styles.name}>{currentUser.name}</Text>
 
             <View style={Styles.section}>
                 <Text style={Styles.label}>Email:</Text>
-                <Text style={Styles.value}>{item.email}</Text>
+                <Text style={Styles.value}>{currentUser.email}</Text>
             </View>
 
             <View style={Styles.section}>
                 <Text style={Styles.label}>Phone:</Text>
-                <Text style={Styles.value}>{item.phone}</Text>
+                <Text style={Styles.value}>{currentUser.phone}</Text>
             </View>
 
             <View style={Styles.section}>
                 <Text style={Styles.label}>Website:</Text>
-                <Text style={Styles.value}>{item.website}</Text>
+                <Text style={Styles.value}>{currentUser.website}</Text>
             </View>
 
             <View style={Styles.section}>
                 <Text style={Styles.label}>Address:</Text>
                 <Text style={Styles.value}>
-                {userData.address.suite}, {item.address.street}, {item.address.city} - {item.address.zipcode}
+                {currentUser.address.suite}, {currentUser.address.street}, {currentUser.address.city} - {currentUser.address.zipcode}
                 </Text>
             </View>
 
             <View style={Styles.section}>
                 <Text style={Styles.label}>Company:</Text>
-                <Text style={Styles.value}>{item.company.name}</Text>
-                <Text style={Styles.companyTag}>{item.company.catchPhrase}</Text>
+                <Text style={Styles.value}>{currentUser.company.name}</Text>
+                <Text style={Styles.companyTag}>{currentUser.company.catchPhrase}</Text>
             </View>
 
             <View style = {Styles.editButtonContainer}>
